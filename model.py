@@ -105,3 +105,26 @@ model_results = pd.DataFrame([['SVM (RBF)', acc, prec, rec, f1]], columns = ['Mo
 
 results = results.append(model_results, ignore_index = True)
 
+## Random Forest
+from sklearn.ensemble import RandomForestClassifier
+classifier = RandomForestClassifier(random_state = 0, n_estimators = 100, criterion = 'entropy')
+classifier.fit(X_train, y_train)
+
+# Predicting Test Set
+y_pred = classifier.predict(X_test)
+from sklearn.metrics import confusion_matrix, accuracy_score, f1_score, precision_score, recall_score
+acc = accuracy_score(y_test, y_pred)
+prec = precision_score(y_test, y_pred)
+rec = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+
+model_results = pd.DataFrame([['Random Forest (n=100)', acc, prec, rec, f1]], columns = ['Model', 'Accuracy', 'Precision', 'Recall', 'F1 Score'])
+
+results = results.append(model_results, ignore_index = True)
+
+## K-fold Cross Validation
+from sklearn.model_selection import cross_val_score
+accuracies = cross_val_score(estimator = classifier, X= X_train, y = y_train,
+                             cv = 10)
+print("Random Forest Classifier Accuracy: %0.2f (+/- %0.2f)"  % (accuracies.mean(), accuracies.std() * 2))
+
