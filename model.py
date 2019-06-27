@@ -180,3 +180,18 @@ print("Took %0.2f seconds" % (t1 - t0))
 rf_best_accuracy = grid_search.best_score_
 rf_best_parametes = grid_search.best_params_
 rf_best_accuracy, rf_best_parametes
+
+
+# Predicting the test set
+y_pred = grid_search.predict(X_test)
+from sklearn.metrics import confusion_matrix, accuracy_score, f1_score, precision_score, recall_score
+acc = accuracy_score(y_test, y_pred)
+prec = precision_score(y_test, y_pred)
+rec = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+
+model_results = pd.DataFrame([['Random Forest (n=100, GS*2 + Entropy)', acc, prec, rec, f1]], columns = ['Model', 'Accuracy', 'Precision', 'Recall', 'F1 Score'])
+
+results = results.append(model_results, ignore_index = True)
+
+
