@@ -195,3 +195,63 @@ model_results = pd.DataFrame([['Random Forest (n=100, GS*2 + Entropy)', acc, pre
 results = results.append(model_results, ignore_index = True)
 
 
+# Round 1 : Gini 
+parameters = {"max_depth": [3, None],
+              "max_features": [1, 5, 10],
+              'min_samples_split': [2, 5, 10],
+              'min_samples_leaf': [1, 5, 10],
+              "bootstrap": [True, False],
+              "criterion": ["gini"]}
+
+from sklearn.model_selection import GridSearchCV
+grid_search = GridSearchCV(estimator = classifier, # Make sure classifier points to the RF model
+                           param_grid = parameters,
+                           scoring = "accuracy",
+                           cv = 10,
+                           n_jobs = -1)
+
+t0 = time.time()
+grid_search = grid_search.fit(X_train, y_train)
+t1 = time.time()
+print("Took %0.2f seconds" % (t1 - t0))
+
+rf_best_accuracy = grid_search.best_score_
+rf_best_parametes = grid_search.best_params_
+rf_best_accuracy, rf_best_parametes
+
+# Round 2: Gini
+parameters = {"max_depth": [None],
+              "max_features": [8, 10, 12],
+              'min_samples_split': [2, 3, 4],
+              'min_samples_leaf': [8, 10, 12],
+              "bootstrap": [True],
+              "criterion": ["gini"]}
+
+from sklearn.model_selection import GridSearchCV
+grid_search = GridSearchCV(estimator = classifier, # Make sure classifier points to the RF model
+                           param_grid = parameters,
+                           scoring = "accuracy",
+                           cv = 10,
+                           n_jobs = -1)
+
+t0 = time.time()
+grid_search = grid_search.fit(X_train, y_train)
+t1 = time.time()
+print("Took %0.2f seconds" % (t1 - t0))
+
+rf_best_accuracy = grid_search.best_score_
+rf_best_parametes = grid_search.best_params_
+rf_best_accuracy, rf_best_parametes
+
+
+# Predicting the test set
+y_pred = grid_search.predict(X_test)
+from sklearn.metrics import confusion_matrix, accuracy_score, f1_score, precision_score, recall_score
+acc = accuracy_score(y_test, y_pred)
+prec = precision_score(y_test, y_pred)
+rec = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+
+model_results = pd.DataFrame([['Random Forest (n=100, GS*2 + Gini)', acc, prec, rec, f1]], columns = ['Model', 'Accuracy', 'Precision', 'Recall', 'F1 Score'])
+
+results = results.append(model_results, ignore_index = True)
