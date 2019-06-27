@@ -255,3 +255,11 @@ f1 = f1_score(y_test, y_pred)
 model_results = pd.DataFrame([['Random Forest (n=100, GS*2 + Gini)', acc, prec, rec, f1]], columns = ['Model', 'Accuracy', 'Precision', 'Recall', 'F1 Score'])
 
 results = results.append(model_results, ignore_index = True)
+
+### End of Model ###
+
+# Formatting Final Results
+
+final_results = pd.concat([y_test, users], axis = 1).dropna()
+final_results["predictions"] = y_pred
+final_results = final_results[['entry_id', 'e_signed', 'predictions']]
