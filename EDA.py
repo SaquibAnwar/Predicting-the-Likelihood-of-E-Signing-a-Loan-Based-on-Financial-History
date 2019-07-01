@@ -32,11 +32,11 @@ for i in range(dataset2.shape[1]):
     plt.subplot(6, 3, i+1)
     f = plt.gca()
     f.set_title(dataset2.columns.values[i])
-    
+
     vals = np.size(dataset2.iloc[:, i].unique())
     if vals >= 100:
         vals = 100
-        
+
     plt.hist(dataset2.iloc[:, i], bins=vals, color='#3F5D7D')
 plt.tight_layout(rect=[0, 0.03, 1, 0.95])
 
@@ -46,7 +46,7 @@ dataset2.corrwith(dataset.e_signed).plot.bar(
         figsize = (20, 10), title = "Correlation with E-signed", fontsize = 15,
         rot = 45, grid = True)
 
-
+## bakchodi
 ## Correlation Matrix
 sn.set(style="white")
 
@@ -66,4 +66,3 @@ cmap = sn.diverging_palette(220, 10, as_cmap=True)
 # Draw the heatmap with the mask and correct aspect ratio
 sn.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
             square=True, linewidths=.5, cbar_kws={"shrink": .5})
-
